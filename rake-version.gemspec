@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/rake-version.rb",
+    "rake-version.gemspec",
     "spec/helper.rb"
   ]
   s.homepage = "http://github.com/AlphaHydrae/rake-version"
