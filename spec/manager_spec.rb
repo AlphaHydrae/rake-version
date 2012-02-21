@@ -16,6 +16,7 @@ describe RakeVersion::Manager do
 
     @version = double('version')
     @version.stub(:to_s){ SAMPLE_VERSION }
+    @version.stub(:bump){ @version }
     @version.stub(:kind_of?){ |type| type == RakeVersion::Version }
   end
 
@@ -40,6 +41,14 @@ describe RakeVersion::Manager do
   it "should ask for the context root" do
     @context.should_receive :root
     @manager.version @context
+  end
+
+  it "should ask the version to bump itself" do
+    @manager.stub(:version){ @version }
+    [ :major, :minor, :patch ].each do |type|
+      @version.should_receive(:bump).with(type)
+      @manager.bump type, @context
+    end
   end
 
   it "should ask the context to read the version file" do

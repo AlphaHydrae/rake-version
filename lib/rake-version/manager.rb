@@ -14,7 +14,7 @@ module RakeVersion
 
     def bump type, context
       RakeVersion.check_context context
-      save version.bump(type), context
+      save version(context).bump(type), context
     end
 
     def save version, context
