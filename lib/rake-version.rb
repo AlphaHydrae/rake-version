@@ -4,6 +4,12 @@ require 'rake/tasklib'
 module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
 
+  class Error < StandardError; end
+  class BadArgument < Error; end
+  class BadContext < BadArgument; end
+  class BadVersion < BadArgument; end
+  class BadBumpType < BadArgument; end
+
   class Tasks < ::Rake::TaskLib
 
     def initialize &block
@@ -17,6 +23,18 @@ module RakeVersion
       task :version do |t|
         puts @manager.version(context(t)).to_s
       end
+
+      namespace :version do
+
+        namespace :bump do
+
+          [ :major, :minor, :patch ].each do |type|
+            task type do |t|
+              puts @manager.bump(type, context(t)).save.to_s
+            end
+          end
+        end
+      end
     end
 
     private
@@ -24,6 +42,20 @@ module RakeVersion
     def context task
       RakeVersion::Context.new task
     end
+  end
+
+  def self.check_context o
+    self.check_type o, RakeVersion::Context, BadContext
+  end
+
+  def self.check_version o
+    self.check_type o, RakeVersion::Version, BadVersion
+  end
+
+  def self.check_type o, expected_type, error_class = Error, name = nil
+    name ||= expected_type.to_s.sub(/.*::/, '')
+    name = name.downcase
+    raise error_class, "Expected #{name} to be a #{expected_type}." unless o.kind_of? expected_type
   end
 end
 

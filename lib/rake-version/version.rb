@@ -26,14 +26,14 @@ module RakeVersion
       when :patch
         @patch += 1
       else
-        raise "Unknown version bump type #{type.inspect}. Expecting :major, :minor or :patch."
+        raise Error, "Unknown version bump type #{type.inspect}. Expecting :major, :minor or :patch."
       end
       self
     end
 
     def from_s s
       s.match(REGEXP).tap do |m|
-        raise "Version '#{s}' expected to have format MAJOR.MINOR.PATCH(.BUILD)(-TAG)." if m.nil?
+        raise Error, "Version '#{s}' expected to have format MAJOR.MINOR.PATCH(.BUILD)(-TAG)." if m.nil?
         @major = m[1].to_i
         @minor = m[2].to_i
         @patch = m[3].to_i

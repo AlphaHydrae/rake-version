@@ -8,13 +8,29 @@ module RakeVersion
   class Manager
 
     def version context
+      RakeVersion.check_context context
       RakeVersion::Version.new.from_s(read_version(context))
+    end
+
+    def bump type, context
+      RakeVersion.check_context context
+      save version.bump(type), context
+    end
+
+    def save version, context
+      RakeVersion.check_version version
+      RakeVersion.check_context context
+      write_version version.to_s, context
     end
 
     private
 
     def read_version context
-      File.open(version_file(context), 'r').read
+      context.read version_file(context)
+    end
+
+    def write_version version, context
+      version.tap{ |v| context.write version_file(context), version.to_s }
     end
 
     def version_file context
