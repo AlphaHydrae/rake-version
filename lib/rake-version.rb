@@ -5,6 +5,7 @@ module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
 
   class Error < StandardError; end
+  class BadVersionString < Error; end
   class MissingContext < Error; end
   class BadArgument < Error; end
   class BadContext < BadArgument; end
