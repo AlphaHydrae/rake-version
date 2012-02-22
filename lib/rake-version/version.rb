@@ -10,9 +10,13 @@ module RakeVersion
     attr_reader :build
     attr_reader :tags
 
-    def initialize major = 0, minor = 0, patch = 0, build = nil, tags = []
-      @major, @minor, @patch, @build, @tags = major, minor, patch, build, tags
-      # TODO: validate numbers and tags
+    def initialize
+      @major = 0
+      @minor = 0
+      @patch = 0
+      @build = nil
+      @tags = []
+      # TODO: create methods to list, add and remove tags
     end
 
     def bump type
