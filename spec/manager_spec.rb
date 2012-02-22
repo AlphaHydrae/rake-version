@@ -52,6 +52,10 @@ describe RakeVersion::Manager do
     with_context{ |m| m.version.to_s.should == SAMPLE_VERSION }
   end
 
+  it "should set the correct version" do
+    with_context{ |m| m.set('1.2.3').to_s.should == '1.2.3' }
+  end
+
   it "should ask for the context root" do
     @context.should_receive :root
     with_context{ |m| m.version }
