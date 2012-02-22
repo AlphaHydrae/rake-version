@@ -5,6 +5,7 @@ module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
 
   class Error < StandardError; end
+  class MissingContext < Error; end
   class BadArgument < Error; end
   class BadContext < BadArgument; end
   class BadVersion < BadArgument; end
@@ -18,19 +19,32 @@ module RakeVersion
       define
     end
 
+    def task *args, &block
+      super *args do |t, args|
+        @manager.with_context context(t) do |m|
+          yield t, args if block_given?
+        end
+      end
+    end
+
     def define
       desc 'Show the current version'
       task :version do |t|
-        puts @manager.version(context(t)).to_s
+        puts @manager.version.to_s
       end
 
       namespace :version do
+
+        desc 'Set the version (e.g. rake version:set[1.2.3])'
+        task :set, :value do |t, args|
+          puts @manager.set(args.value.to_s)
+        end
 
         namespace :bump do
 
           [ :major, :minor, :patch ].each do |type|
             task type do |t|
-              puts @manager.bump(type, context(t)).save.to_s
+              puts @manager.bump(type).to_s
             end
           end
         end

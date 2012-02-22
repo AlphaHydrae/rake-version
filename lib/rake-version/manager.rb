@@ -7,34 +7,49 @@ module RakeVersion
 
   class Manager
 
-    def version context
-      RakeVersion.check_context context
-      RakeVersion::Version.new.from_s(read_version(context))
+    def version
+      check_context
+      RakeVersion::Version.new.from_s read_version
     end
 
-    def bump type, context
-      RakeVersion.check_context context
-      save version(context).bump(type), context
+    def set version_string
+      check_context
+      save RakeVersion::Version.new.from_s(version_string)
     end
 
-    def save version, context
-      RakeVersion.check_version version
+    def bump type
+      check_context
+      save version.bump(type)
+    end
+
+    def with_context context, &block
       RakeVersion.check_context context
-      write_version version.to_s, context
+      @context = context
+      yield self if block_given?
+      @context = nil
     end
 
     private
 
-    def read_version context
-      context.read version_file(context)
+    def check_context
+      raise MissingContext, "A context must be given with :with_context." unless @context
     end
 
-    def write_version version, context
-      version.tap{ |v| context.write version_file(context), version.to_s }
+    def save version
+      RakeVersion.check_version version
+      write_version version
     end
 
-    def version_file context
-      File.join context.root, version_filename
+    def read_version
+      @context.read version_file
+    end
+
+    def write_version version
+      version.tap{ |v| @context.write version_file, version.to_s }
+    end
+
+    def version_file
+      File.join @context.root, version_filename
     end
 
     def version_filename
