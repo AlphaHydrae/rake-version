@@ -18,16 +18,16 @@ module RakeVersion
 
     def set version_string
       check_context
-      copy_version save(RakeVersion::Version.new.from_s(version_string))
+      copy save(RakeVersion::Version.new.from_s(version_string))
     end
 
     def bump type
       check_context
-      copy_version save(version.bump(type))
+      copy save(version.bump(type))
     end
 
-    def copy file_pattern, options = {}
-      @copiers << RakeVersion::Copier.new(file_pattern, options)
+    def config= config
+      @copiers = config.copiers
       self
     end
 
@@ -41,7 +41,7 @@ module RakeVersion
 
     private
 
-    def copy_version version
+    def copy version
       check_context
       @copiers.each{ |c| c.copy @context, version }
       version

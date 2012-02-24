@@ -4,9 +4,15 @@ module RakeVersion
 
   class Copier
 
-    def initialize file_pattern, options = {}
+    def initialize file_pattern, *args
+      options = HashWithIndifferentAccess.new args.extract_options!
+
       @file_pattern = file_pattern
-      @version_pattern = options[:version_pattern] || /\d+\.\d+\.\d+/
+      raise "Expected file pattern to be a string, regexp or array, got #{file_pattern.class.name}." unless [ String, Regexp, Array ].any?{ |klass| file_pattern.kind_of? klass }
+
+      @version_pattern = options[:version] || /\d+\.\d+\.\d+/
+      raise "Expected version option to be a regexp, got #{options[:version].class.name}." unless @version.nil? or @version.kind_of? Regexp
+
       @replace_all = options[:all]
     end
 
@@ -30,7 +36,7 @@ module RakeVersion
 
     def find_files context
       if @file_pattern.kind_of? String
-        Dir.glob @file_pattern
+        Dir.glob(@file_pattern).select{ |f| File.file? f }
       elsif @file_pattern.kind_of? Regexp
         files = []
         Find.find(context.root) do |path|

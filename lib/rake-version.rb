@@ -1,5 +1,6 @@
 
 require 'rake/tasklib'
+require 'active_support/core_ext/hash'
 
 module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
@@ -27,4 +28,4 @@ module RakeVersion
   end
 end
 
-%w( context copier manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }
+%w( config context copier manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }
