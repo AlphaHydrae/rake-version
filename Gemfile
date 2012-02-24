@@ -16,3 +16,7 @@ group :development do
   gem 'yard', '~> 0.7.5'
   gem 'rdiscount', '~> 1.6.8'
 end
+
+group :test do
+  gem 'active_support', '>= 2'
+end
