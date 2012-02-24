@@ -1,4 +1,3 @@
-
 require 'helper'
 
 describe RakeVersion::Version do

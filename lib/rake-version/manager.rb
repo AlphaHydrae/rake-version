@@ -27,6 +27,7 @@ module RakeVersion
       @context = context
       yield self if block_given?
       @context = nil
+      self
     end
 
     private

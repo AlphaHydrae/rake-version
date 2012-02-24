@@ -1,21 +1,21 @@
-
 require 'helper'
 
 describe RakeVersion::Manager do
-  SAMPLE_ROOT = '/tmp'
-  SAMPLE_VERSION = '1.2.3.456-beta-custom'
+  MANAGER_SAMPLE_ROOT = '/tmp'
+  MANAGER_SAMPLE_VERSION = '1.2.3.456-beta-custom'
+  MANAGER_VERSION_FILE = File.join MANAGER_SAMPLE_ROOT, 'VERSION'
 
   before :each do
     @manager = RakeVersion::Manager.new
 
     @context = double('context')
-    @context.stub(:root){ SAMPLE_ROOT }
-    @context.stub(:read){ SAMPLE_VERSION }
+    @context.stub(:root){ MANAGER_SAMPLE_ROOT }
+    @context.stub(:read){ MANAGER_SAMPLE_VERSION }
     @context.stub(:write){}
     @context.stub(:kind_of?){ |type| type == RakeVersion::Context }
 
     @version = double('version')
-    @version.stub(:to_s){ SAMPLE_VERSION }
+    @version.stub(:to_s){ MANAGER_SAMPLE_VERSION }
     @version.stub(:bump){ @version }
     @version.stub(:kind_of?){ |type| type == RakeVersion::Version }
   end
@@ -49,7 +49,7 @@ describe RakeVersion::Manager do
   end
 
   it "should return the correct version" do
-    with_context{ |m| m.version.to_s.should == SAMPLE_VERSION }
+    with_context{ |m| m.version.to_s.should == MANAGER_SAMPLE_VERSION }
   end
 
   it "should set the correct version" do
@@ -70,18 +70,18 @@ describe RakeVersion::Manager do
   end
 
   it "should ask the context to read the version file" do
-    @context.should_receive(:read).with(File.join(SAMPLE_ROOT, 'VERSION'))
+    @context.should_receive(:read).with(MANAGER_VERSION_FILE)
     with_context{ |m| m.version }
   end
 
   it "should ask the context to write the version file when bumping the version" do
-    @context.should_receive(:write).with(File.join(SAMPLE_ROOT, 'VERSION'), '1.3.0.456-beta-custom')
+    @context.should_receive(:write).with(MANAGER_VERSION_FILE, '1.3.0.456-beta-custom')
     with_context{ |m| m.bump :minor }
   end
 
   it "should ask the context to write the version file when setting the version" do
-    @context.should_receive(:write).with(File.join(SAMPLE_ROOT, 'VERSION'), SAMPLE_VERSION)
-    with_context{ |m| m.set SAMPLE_VERSION }
+    @context.should_receive(:write).with(MANAGER_VERSION_FILE, MANAGER_SAMPLE_VERSION)
+    with_context{ |m| m.set MANAGER_SAMPLE_VERSION }
   end
 
   it "should only accept the right type of context" do

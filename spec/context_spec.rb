@@ -1,20 +1,19 @@
-
 require 'helper'
 
 describe RakeVersion::Context do
-  SAMPLE_ROOT = '/tmp'
+  CONTEXT_SAMPLE_ROOT = '/tmp'
 
   before :each do
     
     @application = double('application')
-    @application.stub(:original_dir){ SAMPLE_ROOT }
+    @application.stub(:original_dir){ CONTEXT_SAMPLE_ROOT }
 
     @task = double('task')
     @task.stub(:application){ @application }
   end
 
   it "should return the application directory for the given rake task" do
-    RakeVersion::Context.new(@task).root.should == SAMPLE_ROOT
+    RakeVersion::Context.new(@task).root.should == CONTEXT_SAMPLE_ROOT
   end
 
   it "should successfully read file contents" do
