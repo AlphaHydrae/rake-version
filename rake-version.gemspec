@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rake-version"
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-02-21"
+  s.date = "2012-02-24"
   s.description = "Rake tasks for version management."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".rspec",
     ".rvmrc",
     "Gemfile",
     "Gemfile.lock",
@@ -26,8 +27,16 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/rake-version.rb",
+    "lib/rake-version/context.rb",
+    "lib/rake-version/manager.rb",
+    "lib/rake-version/tasks.rb",
+    "lib/rake-version/version.rb",
     "rake-version.gemspec",
-    "spec/helper.rb"
+    "spec/context_spec.rb",
+    "spec/helper.rb",
+    "spec/manager_spec.rb",
+    "spec/tasks_spec.rb",
+    "spec/version_spec.rb"
   ]
   s.homepage = "http://github.com/AlphaHydrae/rake-version"
   s.licenses = ["MIT"]
