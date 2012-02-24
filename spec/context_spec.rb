@@ -24,8 +24,6 @@ describe RakeVersion::Context do
     File.stub(:open) do |file,mode|
       if mode == 'r' and file == filename
         double('file').tap{ |f| f.stub(:read){ contents } }
-      else
-        nil
       end
     end
 
