@@ -7,6 +7,10 @@ module RakeVersion
 
   class Manager
 
+    def initialize
+      @copiers = []
+    end
+
     def version
       check_context
       RakeVersion::Version.new.from_s read_version
@@ -14,12 +18,17 @@ module RakeVersion
 
     def set version_string
       check_context
-      save RakeVersion::Version.new.from_s(version_string)
+      copy_version save(RakeVersion::Version.new.from_s(version_string))
     end
 
     def bump type
       check_context
-      save version.bump(type)
+      copy_version save(version.bump(type))
+    end
+
+    def copy file_pattern, options = {}
+      @copiers << RakeVersion::Copier.new(file_pattern, options)
+      self
     end
 
     def with_context context, &block
@@ -31,6 +40,12 @@ module RakeVersion
     end
 
     private
+
+    def copy_version version
+      check_context
+      @copiers.each{ |c| c.copy @context, version }
+      version
+    end
 
     def check_context
       raise MissingContext, "A context must be given with :with_context." unless @context

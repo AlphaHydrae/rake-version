@@ -27,4 +27,4 @@ module RakeVersion
   end
 end
 
-%w( context manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }
+%w( context copier manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }
