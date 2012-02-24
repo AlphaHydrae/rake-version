@@ -25,6 +25,7 @@ module RakeVersion
         namespace :bump do
 
           [ :major, :minor, :patch ].each do |type|
+            desc "Bump the #{type} version"
             task type do |t|
               puts @manager.bump(type).to_s
             end
