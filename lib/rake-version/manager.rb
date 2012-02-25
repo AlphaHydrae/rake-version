@@ -1,9 +1,7 @@
 
 module RakeVersion
 
-  attr_accessor :namespace
   attr_accessor :root
-  attr_accessor :version_filename
 
   class Manager
 
