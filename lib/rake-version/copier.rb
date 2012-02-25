@@ -7,22 +7,30 @@ module RakeVersion
     def initialize *args
       options = HashWithIndifferentAccess.new args.extract_options!
 
-      @file_pattern = args.shift
-      raise "Expected file pattern to be a string, regexp or array, got #{@file_pattern.class.name}." unless [ String, Regexp, Array ].any?{ |klass| @file_pattern.kind_of? klass }
-
-      @version_pattern = options[:version] || /\d+\.\d+\.\d+/
-      raise "Expected version option to be a regexp, got #{options[:version].class.name}." unless @version.nil? or @version.kind_of? Regexp
-
-      @replace_all = options[:all]
+      @file_patterns = args.collect{ |arg| check_file_pattern arg }
+      @version_pattern = check_version_pattern(options[:version]) || /\d+\.\d+\.\d+/
+      @replace_all = !!options[:all]
     end
 
-    def copy context, version
-      find_files(context).each do |file|
-        copy_version file, version
-      end
+    def copy version, context
+      find_all_files(context).each{ |f| copy_version f, version }
     end
 
     private
+
+    def check_file_pattern pattern
+      unless [ String, Regexp ].any?{ |klass| pattern.kind_of? klass }
+        raise BadFilePattern, "Expected file pattern to be a glob string or regexp, got #{pattern.class.name}."
+      end
+      pattern
+    end
+
+    def check_version_pattern pattern
+      unless pattern.nil? or pattern.kind_of? Regexp
+        raise BadVersionPattern, "Expected version option to be a regexp, got #{pattern.class.name}."
+      end
+      pattern
+    end
 
     def copy_version file, version
       contents = File.open(file, 'r').read
@@ -34,18 +42,19 @@ module RakeVersion
       File.open(file, 'w'){ |f| f.write contents }
     end
 
-    def find_files context
-      if @file_pattern.kind_of? String
-        Dir.glob(@file_pattern).select{ |f| File.file? f }
-      elsif @file_pattern.kind_of? Regexp
+    def find_all_files context
+      @file_patterns.collect{ |p| find_files p, context }.flatten
+    end
+
+    def find_files pattern, context
+      if pattern.kind_of? String
+        Dir.glob(pattern).select{ |f| File.file? f }
+      elsif pattern.kind_of? Regexp
         files = []
         Find.find(context.root) do |path|
           files << path if File.file?(path) and path.match(@file_pattern)
         end
         files
-      elsif @file_pattern.kind_of? Array
-        Dir.chdir context.root
-        @file_pattern.collect{ |path| File.expand_path path }
       else
         []
       end

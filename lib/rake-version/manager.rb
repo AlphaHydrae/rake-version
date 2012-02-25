@@ -41,7 +41,7 @@ module RakeVersion
 
     def copy version
       check_context
-      @copiers.each{ |c| c.copy @context, version }
+      @copiers.each{ |c| c.copy version, @context }
       version
     end
 

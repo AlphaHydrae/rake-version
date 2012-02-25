@@ -21,7 +21,7 @@ describe RakeVersion::Config do
         [],
         [ 'src/**/*.js' ],
         [ /src\/.*\.sh/ ],
-        [ [ 'src/example.js', 'src/example.rb' ] ],
+        [ 'src/example.js', 'src/example.rb' ],
         [ 'src/**/*.rb', :all => true ]
       ]
       copiers.each do |args|

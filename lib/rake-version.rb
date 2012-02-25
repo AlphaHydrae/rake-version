@@ -12,6 +12,8 @@ module RakeVersion
   class BadContext < BadArgument; end
   class BadVersion < BadArgument; end
   class BadBumpType < BadArgument; end
+  class BadFilePattern < BadArgument; end
+  class BadVersionPattern < BadArgument; end
 
   def self.check_context o
     self.check_type o, RakeVersion::Context, BadContext
