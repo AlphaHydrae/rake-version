@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rake-version"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2012-02-24"
+  s.date = "2012-02-25"
   s.description = "Rake tasks for version management."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -27,12 +27,16 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/rake-version.rb",
+    "lib/rake-version/config.rb",
     "lib/rake-version/context.rb",
+    "lib/rake-version/copier.rb",
     "lib/rake-version/manager.rb",
     "lib/rake-version/tasks.rb",
     "lib/rake-version/version.rb",
     "rake-version.gemspec",
+    "spec/config_spec.rb",
     "spec/context_spec.rb",
+    "spec/copier_spec.rb",
     "spec/helper.rb",
     "spec/manager_spec.rb",
     "spec/tasks_spec.rb",
@@ -49,6 +53,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_runtime_dependency(%q<upoj-rb>, ["~> 0.0.5"])
       s.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
       s.add_development_dependency(%q<shoulda>, ["~> 2.11.3"])
       s.add_development_dependency(%q<bundler>, [">= 0"])
@@ -58,6 +63,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rdiscount>, ["~> 1.6.8"])
     else
       s.add_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_dependency(%q<upoj-rb>, ["~> 0.0.5"])
       s.add_dependency(%q<rspec>, ["~> 2.8.0"])
       s.add_dependency(%q<shoulda>, ["~> 2.11.3"])
       s.add_dependency(%q<bundler>, [">= 0"])
@@ -68,6 +74,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<rake>, ["~> 0.9.2"])
+    s.add_dependency(%q<upoj-rb>, ["~> 0.0.5"])
     s.add_dependency(%q<rspec>, ["~> 2.8.0"])
     s.add_dependency(%q<shoulda>, ["~> 2.11.3"])
     s.add_dependency(%q<bundler>, [">= 0"])

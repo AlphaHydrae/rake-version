@@ -14,6 +14,7 @@ describe RakeVersion::Tasks do
     @manager.stub(:set){ @version }
     @manager.stub(:bump){ @version }
     @manager.stub(:with_context).and_yield(@manager)
+    @manager.stub(:config=)
 
     RakeVersion::Manager.stub(:new){ @manager }
     RakeVersion::Tasks.new

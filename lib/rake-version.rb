@@ -1,5 +1,6 @@
 
 require 'rake/tasklib'
+require 'active_support/core_ext/hash'
 
 module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
@@ -11,6 +12,8 @@ module RakeVersion
   class BadContext < BadArgument; end
   class BadVersion < BadArgument; end
   class BadBumpType < BadArgument; end
+  class BadFilePattern < BadArgument; end
+  class BadVersionPattern < BadArgument; end
 
   def self.check_context o
     self.check_type o, RakeVersion::Context, BadContext
@@ -27,4 +30,4 @@ module RakeVersion
   end
 end
 
-%w( context manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }
+%w( config context copier manager tasks version ).each{ |dep| require File.join(File.dirname(__FILE__), 'rake-version', dep) }

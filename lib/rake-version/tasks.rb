@@ -5,7 +5,9 @@ module RakeVersion
 
     def initialize &block
       @manager = RakeVersion::Manager.new
-      yield @manager if block_given?
+      @config = RakeVersion::Config.new
+      yield @config if block_given?
+      @manager.config = @config
       define
     end
 
@@ -25,6 +27,7 @@ module RakeVersion
         namespace :bump do
 
           [ :major, :minor, :patch ].each do |type|
+            desc "Bump the #{type} version"
             task type do |t|
               puts @manager.bump(type).to_s
             end
