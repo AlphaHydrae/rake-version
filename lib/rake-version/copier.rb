@@ -33,13 +33,24 @@ module RakeVersion
     end
 
     def copy_version file, version
-      contents = File.open(file, 'r').read
-      if @replace_all
-        contents.gsub!(@version_pattern, version.to_s)
-      else
-        contents.sub!(@version_pattern, version.to_s)
+      File.open(file, 'r+') do |f|
+        contents = f.read
+        return unless match? contents
+        f.rewind
+        f.write process(contents, version)
       end
-      File.open(file, 'w'){ |f| f.write contents }
+    end
+
+    def match? contents
+      contents.match @version_pattern
+    end
+
+    def process contents, version
+      if @replace_all
+        contents.gsub(@version_pattern, version.to_s)
+      else
+        contents.sub(@version_pattern, version.to_s)
+      end
     end
 
     def find_all_files context
@@ -48,15 +59,14 @@ module RakeVersion
 
     def find_files pattern, context
       if pattern.kind_of? String
+        Dir.chdir context.root
         Dir.glob(pattern).select{ |f| File.file? f }
       elsif pattern.kind_of? Regexp
         files = []
         Find.find(context.root) do |path|
-          files << path if File.file?(path) and path.match(@file_pattern)
+          files << path if File.file?(path) and path.match(pattern)
         end
         files
-      else
-        []
       end
     end
   end
