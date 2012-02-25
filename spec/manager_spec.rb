@@ -18,6 +18,9 @@ describe RakeVersion::Manager do
     @version.stub(:to_s){ MANAGER_SAMPLE_VERSION }
     @version.stub(:bump){ @version }
     @version.stub(:kind_of?){ |type| type == RakeVersion::Version }
+
+    @copier = double('copier', :copy => nil)
+    @config = double('config', :copiers => [ @copier ])
   end
 
   def with_context &block
@@ -87,6 +90,28 @@ describe RakeVersion::Manager do
   it "should only accept the right type of context" do
     [ nil, true, false, 2, 'bad', :bad, [], {}, @version ].each do |invalid|
       lambda{ @manager.with_context invalid }.should raise_error(RakeVersion::BadContext)
+    end
+  end
+
+  describe 'Copying' do
+
+    it "should ask the given config for its copiers" do
+      @config.should_receive :copiers
+      with_context{ |m| m.config = @config }
+    end
+
+    it "should ask given copiers to copy the version to sources when setting the version" do
+      @manager.config = @config
+      @copier.should_receive(:copy).with(kind_of(RakeVersion::Version), @context)
+      with_context{ |m| m.set '1.2.3' }
+    end
+
+    [ :major, :minor, :patch ].each do |type|
+      it "should ask given copiers to copy the version to sources when bumping the #{type} version" do
+        @manager.config = @config
+        @copier.should_receive(:copy).with(kind_of(RakeVersion::Version), @context)
+        with_context{ |m| m.bump type }
+      end
     end
   end
 end

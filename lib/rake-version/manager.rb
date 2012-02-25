@@ -1,8 +1,6 @@
 
 module RakeVersion
 
-  attr_accessor :root
-
   class Manager
 
     def initialize
