@@ -162,5 +162,21 @@ describe RakeVersion::Copier do
 
       copier.copy @version, @context
     end
+
+    it "should replace the given version pattern" do
+      
+      filename = '/tmp/src/example.js'
+      file = mock_file filename
+      File.stub(:open).and_yield(file)
+
+      copier = RakeVersion::Copier.new '**/*.js', :version => /v\d+\.\d+\.\d+/
+
+      @version.should_receive(:to_s)
+      @context.should_receive(:root)
+      File.should_receive(:open).with(filename, 'r+')
+      file.should_receive(:write).with(COPIER_SAMPLE_FILES[filename].sub(/v2\.3\.4/, '7.8.9'))
+
+      copier.copy @version, @context
+    end
   end
 end
