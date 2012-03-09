@@ -22,7 +22,7 @@ describe RakeVersion::Config do
         [ 'src/**/*.js' ],
         [ /src\/.*\.sh/ ],
         [ 'src/example.js', 'src/example.rb' ],
-        [ 'src/**/*.rb', :all => true ]
+        [ 'src/**/*.rb', { :all => true } ]
       ]
       copiers.each do |args|
         lambda{ @config.copy *args }.should_not raise_error
