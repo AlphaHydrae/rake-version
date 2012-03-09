@@ -2,6 +2,13 @@
 
 **Rake tasks for version management.**
 
+Tested with <a href="https://www.relishapp.com/rspec">RSpec</a>, <a href="https://github.com/thoughtbot/shoulda">shoulda</a> and <a href="http://travis-ci.org/#!/AlphaHydrae/rake-version">Travis CI</a>.
+
+<div style="float:right;">
+* master [![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=master)](http://travis-ci.org/AlphaHydrae/rake-version)
+* develop [![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=develop)](http://travis-ci.org/AlphaHydrae/rake-version)
+</div>
+
 ## License (MIT)
 
 Copyright (c) 2011 Alpha Hydrae
