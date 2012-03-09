@@ -16,6 +16,7 @@ group :development do
   gem 'simplecov', '~> 0.5.4'
   gem 'yard', '~> 0.7.5'
   gem 'rdiscount', '~> 1.6.8'
+  gem 'travis-lint', '~> 1.3.0'
 end
 
 group :test do
