@@ -32,7 +32,7 @@ RSpec::Core::RakeTask.new do |t|
   # Put spec opts in a file named .rspec in root
 end
 
-task :default => :test
+task :default => :spec
 
 desc "Generate documentation"
 task :doc => ['doc:generate']
