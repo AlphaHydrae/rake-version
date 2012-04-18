@@ -1,0 +1,5 @@
+source $HOME/.screenrc
+
+screen -t vim 0 $EDITOR -c GG
+screen -t zsh 1
+select vim
