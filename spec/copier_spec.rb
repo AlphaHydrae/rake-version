@@ -30,11 +30,13 @@ describe RakeVersion::Copier do
 
   it "should accept a regexp as the version option" do
     lambda{ RakeVersion::Copier.new :version => /version/ }.should_not raise_error
+    lambda{ RakeVersion::Copier.new 'version' => /version/ }.should_not raise_error
   end
 
   it "should only accept a regexp as the version option" do
     [ true, false, [], {}, Object.new, :symbol ].each do |invalid|
       lambda{ RakeVersion::Copier.new :version => invalid }.should raise_error(RakeVersion::BadVersionPattern)
+      lambda{ RakeVersion::Copier.new 'version' => invalid }.should raise_error(RakeVersion::BadVersionPattern)
     end
   end
 
@@ -74,7 +76,8 @@ describe RakeVersion::Copier do
     end
 
     def mock_file file
-      double("file #{file}", :read => COPIER_SAMPLE_FILES[file].try(:dup), :rewind => nil, :write => nil)
+      contents = COPIER_SAMPLE_FILES[file] ? COPIER_SAMPLE_FILES[file].dup : nil
+      double("file #{file}", :read => contents, :rewind => nil, :write => nil)
     end
 
     it "should copy the version to ruby files with a glob string" do

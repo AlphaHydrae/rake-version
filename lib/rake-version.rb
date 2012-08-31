@@ -1,6 +1,5 @@
 
 require 'rake/tasklib'
-require 'active_support/core_ext/hash'
 
 module RakeVersion
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read

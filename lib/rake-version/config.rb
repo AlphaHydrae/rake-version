@@ -13,9 +13,7 @@ module RakeVersion
     end
 
     def copy *args
-      options = args.extract_options!
-      args.unshift "src/**/*.#{@extension}" if args.blank?
-      args << options if options.present?
+      args.unshift "src/**/*.#{@extension}" if args.empty?
       @copiers << Copier.new(*args)
       self
     end
