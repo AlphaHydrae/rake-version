@@ -13,8 +13,6 @@ group :development do
   gem 'jeweler'
   gem 'gem-release'
   gem 'simplecov'
-  gem 'yard'
-  gem 'rdiscount'
   gem 'travis-lint'
 end
 

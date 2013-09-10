@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2013-02-04"
+  s.date = "2013-09-10"
   s.description = "Rake tasks for version management."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -17,16 +17,9 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
-    ".document",
-    ".rspec",
-    ".rvmrc",
-    ".screenrc",
-    ".travis.yml",
     "Gemfile",
-    "Gemfile.lock",
     "LICENSE.txt",
     "README.md",
-    "Rakefile",
     "VERSION",
     "lib/rake-version.rb",
     "lib/rake-version/config.rb",
@@ -34,17 +27,9 @@ Gem::Specification.new do |s|
     "lib/rake-version/copier.rb",
     "lib/rake-version/manager.rb",
     "lib/rake-version/tasks.rb",
-    "lib/rake-version/version.rb",
-    "rake-version.gemspec",
-    "spec/config_spec.rb",
-    "spec/context_spec.rb",
-    "spec/copier_spec.rb",
-    "spec/helper.rb",
-    "spec/manager_spec.rb",
-    "spec/tasks_spec.rb",
-    "spec/version_spec.rb"
+    "lib/rake-version/version.rb"
   ]
-  s.homepage = "http://github.com/AlphaHydrae/rake-version"
+  s.homepage = "https://github.com/AlphaHydrae/rake-version"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.25"
