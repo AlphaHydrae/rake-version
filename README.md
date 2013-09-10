@@ -1,18 +1,92 @@
 # rake-version
 
-**Rake tasks for version management.**
+**Simple rake tasks for version management.**
 
-Tested with <a href="https://www.relishapp.com/rspec">RSpec</a>, <a href="https://github.com/thoughtbot/shoulda">shoulda</a> and <a href="http://travis-ci.org/#!/AlphaHydrae/rake-version">Travis CI</a>.
+[![Gem Version](https://badge.fury.io/rb/rake-version.png)](http://badge.fury.io/rb/rake-version)
+[![Dependency Status](https://gemnasium.com/AlphaHydrae/rake-version.png)](https://gemnasium.com/AlphaHydrae/rake-version)
+[![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=master)](http://travis-ci.org/AlphaHydrae/rake-version)
 
-* master [![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=master)](http://travis-ci.org/AlphaHydrae/rake-version)
-* develop [![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=develop)](http://travis-ci.org/AlphaHydrae/rake-version)
+**rake-version** helps you manage your `VERSION` file according to the rules of [semantic versioning](http://semver.org).
+It does nothing more.
+It does not create tags; it does not commit; it does not push; it does not release.
 
-## License (MIT)
+## Installation
 
-Copyright (c) 2011 Alpha Hydrae
+Add to your Gemfile and `bundle install`:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+```rb
+gem "rake-version", "~> 0.0"
+```
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Add the tasks to your Rakefile:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```rb
+require 'rake-version'
+RakeVersion::Tasks.new
+```
+
+## Usage
+
+```bash
+# show current version
+rake version              #=> 1.0.0
+
+# bump version
+rake version:bump:patch   #=> 1.0.1
+rake version:bump:minor   #=> 1.1.0
+rake version:bump:major   #=> 2.0.0
+
+# set version
+rake "version:set[1.2.3]" #=> 1.2.3
+```
+
+### Auto-update other files
+
+When you add the rake version tasks in your Rakefile, you may specify additional files to update with the new version.
+
+```rb
+require 'rake-version'
+RakeVersion::Tasks.new do |v|
+  v.copy 'lib/my-gem.rb'          # update single file
+  v.copy 'lib/a.rb', 'lib/b.rb'   # update multiple files
+  v.copy 'lib/*.rb'               # update all files matching a glob pattern
+  v.copy /lib/                    # update all files whose path matches a regexp
+end
+```
+
+By default, **rake-version** will replace the first occurrence of a semantic version pattern (`number.number.number(-prerelease)(+build)`) with the new version.
+It will not modify the prerelease version or build metadata.
+For example, when bumping the minor version from 1.0.0, it will change the contents of this file:
+
+```rb
+class Thing
+  VERSION = '1.0.0'
+end
+```
+
+To this:
+
+```rb
+class Thing
+  VERSION = '1.1.0'
+end
+```
+
+You can customize this behavior as follows:
+
+```rb
+RakeVersion::Tasks.new do |v|
+  v.copy 'lib/my-gem.rb', all: true   # replace all occurrences
+end
+```
+
+### Semantic versioning
+
+**rake-version** partially supports [semantic versioning v2.0.0](http://semver.org/spec/v2.0.0.html).
+You can add prerelease (e.g. `-beta`) and build (e.g. `+20131313`) information to your versions,
+but there are currently no tasks to update them other than `version:set`.
+
+## Meta
+
+* **Author:** Simon Oulevay (Alpha Hydrae)
+* **License:** MIT (see [LICENSE.txt](https://raw.github.com/AlphaHydrae/rake-version/master/LICENSE.txt))

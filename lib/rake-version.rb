@@ -7,16 +7,13 @@ module RakeVersion
   class Error < StandardError; end
   class BadVersionString < Error; end
   class MissingContext < Error; end
+  class MissingVersionFile < Error; end
   class BadArgument < Error; end
   class BadContext < BadArgument; end
   class BadVersion < BadArgument; end
   class BadBumpType < BadArgument; end
   class BadFilePattern < BadArgument; end
   class BadVersionPattern < BadArgument; end
-
-  def self.check_context o
-    self.check_type o, RakeVersion::Context, BadContext
-  end
 
   def self.check_version o
     self.check_type o, RakeVersion::Version, BadVersion

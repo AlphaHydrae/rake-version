@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "rake-version"
   gem.homepage = "https://github.com/AlphaHydrae/rake-version"
   gem.license = "MIT"
-  gem.summary = %Q{Rake tasks for version management.}
-  gem.description = %Q{Rake tasks for version management.}
+  gem.summary = %Q{Simple rake tasks for version management.}
+  gem.description = %Q{Rake tasks to manage your VERSION file. No repository management (tags, committing, pushing), no release management.}
   gem.email = "hydrae.alpha@gmail.com"
   gem.authors = ["AlphaHydrae"]
   gem.files = %x[git ls-files -- lib].split("\n") + %w(Gemfile LICENSE.txt README.md VERSION)

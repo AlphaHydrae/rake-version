@@ -6,10 +6,6 @@ describe RakeVersion::Config do
     @config = RakeVersion::Config.new
   end
 
-  it "should be an open structure" do
-    lambda{ @config.fubar = true }.should_not raise_error
-  end
-
   describe 'Copiers' do
     
     it "should not have any copiers by default" do

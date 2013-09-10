@@ -5,11 +5,11 @@ module RakeVersion
   class Copier
 
     def initialize *args
-      @options = args.last.kind_of?(Hash) ? args.pop : {}
+      options = args.last.kind_of?(Hash) ? args.pop : {}
 
       @file_patterns = args.collect{ |arg| check_file_pattern arg }
-      @version_pattern = check_version_pattern(option(:version)) || /\d+\.\d+\.\d+/
-      @replace_all = !!option(:all)
+      @version_pattern = Version::REGEXP
+      @replace_all = !!options[:all]
     end
 
     def copy version, context
@@ -18,24 +18,9 @@ module RakeVersion
 
     private
 
-    def option sym
-      if @options.key? sym
-        @options[sym]
-      elsif @options.key? sym.to_s
-        @options[sym.to_s]
-      end
-    end
-
     def check_file_pattern pattern
       unless [ String, Regexp ].any?{ |klass| pattern.kind_of? klass }
         raise BadFilePattern, "Expected file pattern to be a glob string or regexp, got #{pattern.class.name}."
-      end
-      pattern
-    end
-
-    def check_version_pattern pattern
-      unless pattern.nil? or pattern.kind_of? Regexp
-        raise BadVersionPattern, "Expected version option to be a regexp, got #{pattern.class.name}."
       end
       pattern
     end
@@ -45,6 +30,7 @@ module RakeVersion
         contents = f.read
         return unless match? contents
         f.rewind
+        f.truncate 0
         f.write process(contents, version)
       end
     end

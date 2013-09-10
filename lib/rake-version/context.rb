@@ -2,21 +2,10 @@
 module RakeVersion
 
   class Context
+    attr_reader :root
   
-    def initialize task
-      @task = task
-    end
-
-    def root
-      File.expand_path @task.application.original_dir
-    end
-
-    def read file
-      File.open(file, 'r').read
-    end
-
-    def write file, contents
-      File.open(file, 'w'){ |f| f.write contents }
+    def initialize root
+      @root = root
     end
   end
 end

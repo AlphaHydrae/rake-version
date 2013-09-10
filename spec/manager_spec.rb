@@ -1,18 +1,17 @@
 require 'helper'
 
 describe RakeVersion::Manager do
+  include FakeFS::SpecHelpers
   MANAGER_SAMPLE_ROOT = '/tmp'
-  MANAGER_SAMPLE_VERSION = '1.2.3.456-beta-custom'
+  MANAGER_SAMPLE_VERSION = '1.2.3-beta+456'
   MANAGER_VERSION_FILE = File.join MANAGER_SAMPLE_ROOT, 'VERSION'
 
   before :each do
     @manager = RakeVersion::Manager.new
 
-    @context = double('context')
-    @context.stub(:root){ MANAGER_SAMPLE_ROOT }
-    @context.stub(:read){ MANAGER_SAMPLE_VERSION }
-    @context.stub(:write){}
-    @context.stub(:kind_of?){ |type| type == RakeVersion::Context }
+    @context = double root: MANAGER_SAMPLE_ROOT
+    FileUtils.mkdir_p MANAGER_SAMPLE_ROOT
+    File.open(MANAGER_VERSION_FILE, 'w'){ |f| f.write MANAGER_SAMPLE_VERSION }
 
     @version = double('version')
     @version.stub(:to_s){ MANAGER_SAMPLE_VERSION }
@@ -36,11 +35,8 @@ describe RakeVersion::Manager do
         v.major.should == 1
         v.minor.should == 2
         v.patch.should == 3
-        v.build.should == 456
-        v.tags.should be_a_kind_of(Array)
-        v.tags.length.should == 2
-        v.tags[0].should == 'beta'
-        v.tags[1].should == 'custom'
+        v.prerelease.should == 'beta'
+        v.build.should == '456'
       end
     end
   end
@@ -72,25 +68,19 @@ describe RakeVersion::Manager do
     end
   end
 
-  it "should ask the context to read the version file" do
-    @context.should_receive(:read).with(MANAGER_VERSION_FILE)
-    with_context{ |m| m.version }
-  end
-
-  it "should ask the context to write the version file when bumping the version" do
-    @context.should_receive(:write).with(MANAGER_VERSION_FILE, '1.3.0.456-beta-custom')
+  it "should write the version file when bumping the version" do
     with_context{ |m| m.bump :minor }
+    expect(File.read(MANAGER_VERSION_FILE)).to eq('1.3.0-beta+456')
   end
 
   it "should ask the context to write the version file when setting the version" do
-    @context.should_receive(:write).with(MANAGER_VERSION_FILE, MANAGER_SAMPLE_VERSION)
-    with_context{ |m| m.set MANAGER_SAMPLE_VERSION }
+    with_context{ |m| m.set '3.2.1-rc1' }
+    expect(File.read(MANAGER_VERSION_FILE)).to eq('3.2.1-rc1')
   end
 
-  it "should only accept the right type of context" do
-    [ nil, true, false, 2, 'bad', :bad, [], {}, @version ].each do |invalid|
-      lambda{ @manager.with_context invalid }.should raise_error(RakeVersion::BadContext)
-    end
+  it "should raise an error if the version file doesn't exist" do
+    File.delete MANAGER_VERSION_FILE
+    expect{ with_context{ |m| m.version } }.to raise_error(RakeVersion::MissingVersionFile)
   end
 
   describe 'Copying' do

@@ -2,21 +2,20 @@
 module RakeVersion
 
   class Version
-    REGEXP = /^(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?((?:\-[A-Za-z0-9]+)*)$/
+    REGEXP = /(\d+)\.(\d+)\.(\d+)(?:\-([a-z0-9\-]+(?:\.[a-z0-9\-]+)*))?(?:\+([a-z0-9\-]+(?:\.[a-z0-9\-]+)*))?/i
 
     attr_reader :major
     attr_reader :minor
     attr_reader :patch
+    attr_reader :prerelease
     attr_reader :build
-    attr_reader :tags
 
     def initialize
       @major = 0
       @minor = 0
       @patch = 0
+      @prerelease = nil
       @build = nil
-      @tags = []
-      # TODO: create methods to list, add and remove tags
     end
 
     def bump type
@@ -38,12 +37,12 @@ module RakeVersion
 
     def from_s s
       s.to_s.match(REGEXP).tap do |m|
-        raise BadVersionString, "Version '#{s}' expected to have format MAJOR.MINOR.PATCH(.BUILD)(-TAG)." if m.nil?
+        raise BadVersionString, "Version '#{s}' expected to have format MAJOR.MINOR.PATCH(-PRERELEASE)(+BUILD)." if m.nil?
         @major = m[1].to_i
         @minor = m[2].to_i
         @patch = m[3].to_i
-        @build = m[4] ? m[4].to_i : nil
-        @tags = m[5] ? m[5].sub(/^\-/, '').split('-') : []
+        @prerelease = m[4]
+        @build = m[5]
       end
       self
     end
@@ -51,8 +50,8 @@ module RakeVersion
     def to_s
       String.new.tap do |s|
         s << "#{@major}.#{@minor}.#{@patch}"
-        s << ".#{@build}" if @build
-        s << tags.collect{ |tag| "-#{tag}" }.join('') unless tags.empty?
+        s << "-#{@prerelease}" if @prerelease
+        s << "+#{@build}" if @build
       end
     end
   end

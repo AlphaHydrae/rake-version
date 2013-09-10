@@ -1,8 +1,8 @@
 require 'rubygems'
 require 'bundler'
-require 'simplecov'
+require 'fakefs/spec_helpers'
 
-# test coverage
+require 'simplecov'
 SimpleCov.start
 
 begin
@@ -14,8 +14,4 @@ rescue Bundler::BundlerError => e
 end
 
 require 'rspec'
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rake-version'
-

@@ -1,8 +1,7 @@
-require 'ostruct'
 
 module RakeVersion
 
-  class Config < OpenStruct
+  class Config
 
     attr_reader :extension
 

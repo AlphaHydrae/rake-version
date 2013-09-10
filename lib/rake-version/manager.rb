@@ -28,7 +28,6 @@ module RakeVersion
     end
 
     def with_context context, &block
-      RakeVersion.check_context context
       @context = context
       yield self if block_given?
       @context = nil
@@ -53,11 +52,12 @@ module RakeVersion
     end
 
     def read_version
-      @context.read version_file
+      raise MissingVersionFile, "Version file doesn't exist: #{version_file}" unless File.exists? version_file
+      File.read version_file
     end
 
     def write_version version
-      version.tap{ |v| @context.write version_file, version.to_s }
+      version.tap{ |v| File.open(version_file, 'w'){ |f| f.write version.to_s } }
     end
 
     def version_file
