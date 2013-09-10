@@ -1,5 +1,10 @@
 require 'helper'
 
+describe 'Version' do
+  subject{ RakeVersion::VERSION }
+  it{ should eq(File.read(File.join(File.dirname(__FILE__), '..', 'VERSION'))) }
+end
+
 describe RakeVersion::Version do
 
   it "should build a correct version object when initialized" do
