@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = "rake-version"
-  s.version = "0.3.1"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
   s.date = "2013-09-10"
-  s.description = "Rake tasks for version management."
+  s.description = "Rake tasks to manage your VERSION file. No repository management (tags, committing, pushing), no release management."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.25"
-  s.summary = "Rake tasks for version management."
+  s.summary = "Simple rake tasks for version management."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -45,9 +45,8 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<gem-release>, [">= 0"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
-      s.add_development_dependency(%q<yard>, [">= 0"])
-      s.add_development_dependency(%q<rdiscount>, [">= 0"])
       s.add_development_dependency(%q<travis-lint>, [">= 0"])
+      s.add_development_dependency(%q<fakefs>, [">= 0"])
     else
       s.add_dependency(%q<rake>, ["~> 10"])
       s.add_dependency(%q<rspec>, [">= 0"])
@@ -55,9 +54,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<gem-release>, [">= 0"])
       s.add_dependency(%q<simplecov>, [">= 0"])
-      s.add_dependency(%q<yard>, [">= 0"])
-      s.add_dependency(%q<rdiscount>, [">= 0"])
       s.add_dependency(%q<travis-lint>, [">= 0"])
+      s.add_dependency(%q<fakefs>, [">= 0"])
     end
   else
     s.add_dependency(%q<rake>, ["~> 10"])
@@ -66,9 +64,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<gem-release>, [">= 0"])
     s.add_dependency(%q<simplecov>, [">= 0"])
-    s.add_dependency(%q<yard>, [">= 0"])
-    s.add_dependency(%q<rdiscount>, [">= 0"])
     s.add_dependency(%q<travis-lint>, [">= 0"])
+    s.add_dependency(%q<fakefs>, [">= 0"])
   end
 end
 
