@@ -15,4 +15,5 @@ group :development do
   gem 'simplecov'
   gem 'travis-lint'
   gem 'fakefs', require: 'fakefs/safe'
+  gem 'coveralls', require: false
 end

@@ -5,6 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/rake-version.png)](http://badge.fury.io/rb/rake-version)
 [![Dependency Status](https://gemnasium.com/AlphaHydrae/rake-version.png)](https://gemnasium.com/AlphaHydrae/rake-version)
 [![Build Status](https://secure.travis-ci.org/AlphaHydrae/rake-version.png?branch=master)](http://travis-ci.org/AlphaHydrae/rake-version)
+[![Coverage Status](https://coveralls.io/repos/AlphaHydrae/rake-version/badge.png?branch=master)](https://coveralls.io/r/AlphaHydrae/rake-version?branch=master)
 
 **rake-version** helps you manage your `VERSION` file according to the rules of [semantic versioning](http://semver.org).
 It does nothing more.
