@@ -2,7 +2,7 @@
 require 'rake/tasklib'
 
 module RakeVersion
-  VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
+  VERSION = '0.4.0'
 
   class Error < StandardError; end
   class BadVersionString < Error; end

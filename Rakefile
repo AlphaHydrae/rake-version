@@ -26,6 +26,11 @@ Jeweler::Tasks.new do |gem|
 end
 Jeweler::RubygemsDotOrgTasks.new
 
+require './lib/rake-version.rb'
+RakeVersion::Tasks.new do |v|
+  v.copy 'lib/rake-version.rb'
+end
+
 require 'rspec/core/rake_task'
 desc "Run specs"
 RSpec::Core::RakeTask.new do |t|
