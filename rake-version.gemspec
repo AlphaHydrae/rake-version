@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2013-09-10"
+  s.date = "2013-10-04"
   s.description = "Rake tasks to manage your VERSION file. No repository management (tags, committing, pushing), no release management."
   s.email = "hydrae.alpha@gmail.com"
   s.extra_rdoc_files = [
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "lib/rake-version/config.rb",
     "lib/rake-version/context.rb",
     "lib/rake-version/copier.rb",
+    "lib/rake-version/ext.rb",
     "lib/rake-version/manager.rb",
     "lib/rake-version/tasks.rb",
     "lib/rake-version/version.rb"

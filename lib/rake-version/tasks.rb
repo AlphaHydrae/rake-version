@@ -52,7 +52,7 @@ module RakeVersion
     def clear_tasks options = {}
       task_names = NAMES
       task_names += OTHER_NAMES unless options[:clear_strict]
-      task_names.each{ |task| clear task }
+      task_names.each{ |task| remove_task task }
     end
 
     private
@@ -67,12 +67,8 @@ module RakeVersion
       end
     end
 
-    def clear task
-      begin
-        Rake::Task[task].clear if Rake::Task[task]
-      rescue
-        false
-      end
+    def remove_task task_name
+      Rake.application.remove_task task_name
     end
 
     def context task

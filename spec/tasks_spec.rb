@@ -19,6 +19,7 @@ describe RakeVersion::Tasks do
     @manager.stub(:config=)
 
     RakeVersion::Manager.stub(:new){ @manager }
+    Rake.application.stub remove_task: nil
   end
 
   context "automatic clearing" do
@@ -33,24 +34,20 @@ describe RakeVersion::Tasks do
 
     context "with existing tasks" do
 
-      before :each do
-        Rake::Task.stub :[] => rake_task_double
-      end
-
       it "should clear existing version tasks" do
-        all_task_names.each{ |task_name| Rake::Task.should_receive(:[]).with(task_name).ordered }
-        expect(rake_task_double).to receive(:clear).exactly(all_task_names.length).times
+        all_task_names.each{ |task_name| expect(Rake.application).to receive(:remove_task).with(task_name).ordered }
+        expect(Rake.application).not_to receive(:remove_task).ordered
         RakeVersion::Tasks.new
       end
 
       it "should only clear rake-version tasks in strict mode" do
-        task_names.each{ |task_name| Rake::Task.should_receive(:[]).with(task_name).ordered }
-        expect(rake_task_double).to receive(:clear).exactly(task_names.length).times
+        task_names.each{ |task_name| expect(Rake.application).to receive(:remove_task).with(task_name).ordered }
+        expect(Rake.application).not_to receive(:remove_task).ordered
         RakeVersion::Tasks.new clear_strict: true
       end
 
       it "should not clear existing version tasks if disabled" do
-        expect(rake_task_double).not_to receive(:clear)
+        expect(Rake.application).not_to receive(:remove_task)
         RakeVersion::Tasks.new clear: false
       end
     end
