@@ -2,7 +2,7 @@
 require 'rake/tasklib'
 
 module RakeVersion
-  VERSION = '0.4.0'
+  VERSION = '0.4.1'
 
   class Error < StandardError; end
   class BadVersionString < Error; end
