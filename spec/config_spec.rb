@@ -7,9 +7,9 @@ describe RakeVersion::Config do
   end
 
   describe 'Copiers' do
-    
+
     it "should not have any copiers by default" do
-      @config.copiers.should be_empty
+      expect(@config.copiers).to be_empty
     end
 
     it "should correctly create copiers" do
@@ -21,43 +21,43 @@ describe RakeVersion::Config do
         [ 'src/**/*.rb', { :all => true } ]
       ]
       copiers.each do |args|
-        lambda{ @config.copy *args }.should_not raise_error
+        expect{ @config.copy *args }.not_to raise_error
       end
-      @config.copiers.length.should == copiers.length
+      expect(@config.copiers.length).to eq(copiers.length)
     end
 
     it "should create copiers with a ruby extension glob by default" do
-      RakeVersion::Copier.should_receive(:new).with('src/**/*.rb')
+      expect(RakeVersion::Copier).to receive(:new).with('src/**/*.rb')
       @config.copy
     end
 
     it "should return itself when creating a copier" do
-      @config.copy.should === @config
+      expect(@config.copy).to be(@config)
     end
 
     it "should return a copy of its copiers array" do
       @config.copy
       @config.copiers.clear
-      @config.copiers.length.should == 1
+      expect(@config.copiers.length).to eq(1)
     end
   end
 
   describe 'Extension' do
-    
+
     it "should have the ruby extension by default" do
-      @config.extension.should == 'rb'
+      expect(@config.extension).to eq('rb')
     end
 
     it "should accept alphanumerical extensions" do
       [ :rb, 'js', :sh, 'py', double('extension', :to_s => 'java') ].each do |ext|
-        lambda{ @config.extension = ext }.should_not raise_error
-        @config.extension.should == ext.to_s
+        expect{ @config.extension = ext }.not_to raise_error
+        expect(@config.extension).to eq(ext.to_s)
       end
     end
 
     it "should not accept non-alphanumerical extensions" do
       [ nil, '.', :_, [], {}, double('fubar') ].each do |invalid|
-        lambda{ @config.extension = invalid }.should raise_error(StandardError)
+        expect{ @config.extension = invalid }.to raise_error(StandardError)
       end
     end
   end

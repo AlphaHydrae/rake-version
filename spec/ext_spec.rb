@@ -7,8 +7,8 @@ describe "Rake Extension" do
 
     Rake::Task.define_task('foo'){}
 
-    expect(Rake::Task.task_defined?('foo')).to be_true
+    expect(Rake::Task.task_defined?('foo')).to be(true)
     Rake.application.remove_task 'foo'
-    expect(Rake::Task.task_defined?('foo')).to be_false
+    expect(Rake::Task.task_defined?('foo')).to be(false)
   end
 end

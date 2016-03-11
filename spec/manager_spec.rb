@@ -14,9 +14,9 @@ describe RakeVersion::Manager do
     File.open(MANAGER_VERSION_FILE, 'w'){ |f| f.write MANAGER_SAMPLE_VERSION }
 
     @version = double('version')
-    @version.stub(:to_s){ MANAGER_SAMPLE_VERSION }
-    @version.stub(:bump){ @version }
-    @version.stub(:kind_of?){ |type| type == RakeVersion::Version }
+    allow(@version).to receive(:to_s){ MANAGER_SAMPLE_VERSION }
+    allow(@version).to receive(:bump){ @version }
+    allow(@version).to receive(:kind_of?){ |type| type == RakeVersion::Version }
 
     @copier = double('copier', :copy => nil)
     @config = double('config', :copiers => [ @copier ])
@@ -31,39 +31,39 @@ describe RakeVersion::Manager do
   it "should return a version object" do
     with_context do |m|
       m.version.tap do |v|
-        v.should be_a_kind_of(RakeVersion::Version)
-        v.major.should == 1
-        v.minor.should == 2
-        v.patch.should == 3
-        v.prerelease.should == 'beta'
-        v.build.should == '456'
+        expect(v).to be_a_kind_of(RakeVersion::Version)
+        expect(v.major).to eq(1)
+        expect(v.minor).to eq(2)
+        expect(v.patch).to eq(3)
+        expect(v.prerelease).to eq('beta')
+        expect(v.build).to eq('456')
       end
     end
   end
 
   it "should require a context for all operations" do
-    lambda{ @manager.version }.should raise_error(RakeVersion::MissingContext)
-    lambda{ @manager.set '1.2.3' }.should raise_error(RakeVersion::MissingContext)
-    lambda{ @manager.bump :minor }.should raise_error(RakeVersion::MissingContext)
+    expect{ @manager.version }.to raise_error(RakeVersion::MissingContext)
+    expect{ @manager.set '1.2.3' }.to raise_error(RakeVersion::MissingContext)
+    expect{ @manager.bump :minor }.to raise_error(RakeVersion::MissingContext)
   end
 
   it "should return the correct version" do
-    with_context{ |m| m.version.to_s.should == MANAGER_SAMPLE_VERSION }
+    with_context{ |m| expect(m.version.to_s).to eq(MANAGER_SAMPLE_VERSION) }
   end
 
   it "should set the correct version" do
-    with_context{ |m| m.set('1.2.3').to_s.should == '1.2.3' }
+    with_context{ |m| expect(m.set('1.2.3').to_s).to eq('1.2.3') }
   end
 
   it "should ask for the context root" do
-    @context.should_receive :root
+    expect(@context).to receive :root
     with_context{ |m| m.version }
   end
 
   it "should ask the version to bump itself" do
-    @manager.stub(:version){ @version }
+    allow(@manager).to receive(:version){ @version }
     [ :major, :minor, :patch ].each do |type|
-      @version.should_receive(:bump).with(type)
+      expect(@version).to receive(:bump).with(type)
       with_context{ |m| m.bump type }
     end
   end
@@ -86,20 +86,20 @@ describe RakeVersion::Manager do
   describe 'Copying' do
 
     it "should ask the given config for its copiers" do
-      @config.should_receive :copiers
+      expect(@config).to receive :copiers
       with_context{ |m| m.config = @config }
     end
 
     it "should ask given copiers to copy the version to sources when setting the version" do
       @manager.config = @config
-      @copier.should_receive(:copy).with(kind_of(RakeVersion::Version), @context)
+      expect(@copier).to receive(:copy).with(kind_of(RakeVersion::Version), @context)
       with_context{ |m| m.set '1.2.3' }
     end
 
     [ :major, :minor, :patch ].each do |type|
       it "should ask given copiers to copy the version to sources when bumping the #{type} version" do
         @manager.config = @config
-        @copier.should_receive(:copy).with(kind_of(RakeVersion::Version), @context)
+        expect(@copier).to receive(:copy).with(kind_of(RakeVersion::Version), @context)
         with_context{ |m| m.bump type }
       end
     end

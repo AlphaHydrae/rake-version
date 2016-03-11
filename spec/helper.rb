@@ -14,10 +14,11 @@ require 'simplecov'
 require 'coveralls'
 Coveralls.wear!
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
 ]
 
 require 'rspec'
+require 'rspec/its'
 require 'rake-version'

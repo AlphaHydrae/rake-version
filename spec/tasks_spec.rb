@@ -9,17 +9,17 @@ describe RakeVersion::Tasks do
     Rake::Task.clear
 
     @version = double
-    @version.stub(:to_s){ TASKS_SAMPLE_VERSION }
+    allow(@version).to receive(:to_s){ TASKS_SAMPLE_VERSION }
 
     @manager = double
-    @manager.stub(:version){ @version }
-    @manager.stub(:set){ @version }
-    @manager.stub(:bump){ @version }
-    @manager.stub(:with_context).and_yield(@manager).and_return(@manager)
-    @manager.stub(:config=)
+    allow(@manager).to receive(:version){ @version }
+    allow(@manager).to receive(:set){ @version }
+    allow(@manager).to receive(:bump){ @version }
+    allow(@manager).to receive(:with_context).and_yield(@manager).and_return(@manager)
+    allow(@manager).to receive(:config=)
 
-    RakeVersion::Manager.stub(:new){ @manager }
-    Rake.application.stub remove_task: nil
+    allow(RakeVersion::Manager).to receive(:new){ @manager }
+    allow(Rake.application).to receive(:remove_task){ nil }
   end
 
   context "automatic clearing" do
@@ -61,46 +61,46 @@ describe RakeVersion::Tasks do
 
     it "should define all tasks" do
       %w( version version:set version:bump:major version:bump:minor version:bump:patch ).each do |name|
-        Rake::Task[name].should be_a_kind_of(Rake::Task)
+        expect(Rake::Task[name]).to be_a_kind_of(Rake::Task)
       end
     end
 
     it "should receive a context whose root is the application directory of the rake task" do
-      @manager.should_receive :with_context do |context|
+      expect(@manager).to receive :with_context do |context|
         expect(context.root).to eq(Rake.application.original_dir)
       end.and_yield(@manager)
       expect_success(TASKS_SAMPLE_VERSION){ Rake::Task['version'].execute }
     end
 
     it "should ask the manager to return the current version" do
-      @manager.should_receive(:version)
+      expect(@manager).to receive(:version)
       expect_success(TASKS_SAMPLE_VERSION){ Rake::Task['version'].execute }
     end
 
     it "should ask the manager to set the version" do
-      @manager.should_receive(:set).with(kind_of(String))
+      expect(@manager).to receive(:set).with(kind_of(String))
       expect_success(TASKS_SAMPLE_VERSION){ Rake::Task['version:set'].invoke TASKS_SAMPLE_VERSION }
     end
 
     [ :major, :minor, :patch ].each do |type|
       it "should ask the manager to bump the #{type} version" do
-        @manager.should_receive(:bump).with(type)
+        expect(@manager).to receive(:bump).with(type)
         expect_success(TASKS_SAMPLE_VERSION){ Rake::Task["version:bump:#{type}"].execute }
       end
     end
 
     it "should print a warning on stderr if the version file doesn't exist" do
-      @manager.stub(:version){ raise RakeVersion::MissingVersionFile.new('fubar') }
+      allow(@manager).to receive(:version){ raise RakeVersion::MissingVersionFile.new('fubar') }
       expect_failure(/fubar/){ Rake::Task['version'].execute }
     end
 
     it "should raise an error if the version file doesn't exist and trace is enabled" do
-      Rake.application.options.stub trace: true
-      @manager.stub(:version){ raise RakeVersion::MissingVersionFile.new('fubar') }
+      allow(Rake.application.options).to receive(:trace){ true }
+      allow(@manager).to receive(:version){ raise RakeVersion::MissingVersionFile.new('fubar') }
       expect_error(RakeVersion::MissingVersionFile){ Rake::Task['version'].execute }
     end
   end
-  
+
   private
 
   def expect_success output
