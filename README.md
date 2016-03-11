@@ -16,7 +16,7 @@ It does not create tags; it does not commit; it does not push; it does not relea
 Add to your Gemfile and `bundle install`:
 
 ```rb
-gem "rake-version", "~> 0.0"
+gem "rake-version", "~> 1.0"
 ```
 
 Add the tasks to your Rakefile:
