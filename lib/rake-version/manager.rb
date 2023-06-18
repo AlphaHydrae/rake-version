@@ -52,7 +52,7 @@ module RakeVersion
     end
 
     def read_version
-      raise MissingVersionFile, "Version file doesn't exist: #{version_file}" unless File.exists? version_file
+      raise MissingVersionFile, "Version file doesn't exist: #{version_file}" unless File.exist? version_file
       File.read version_file
     end
 
